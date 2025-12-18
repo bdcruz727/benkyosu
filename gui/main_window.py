@@ -1,41 +1,41 @@
-from PySide6.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QFileDialog
-import sys
+import customtkinter as ctk
+from tkinter import filedialog
 
-class MainWindow(QWidget):
+class App(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Benkyosu")
-        self.resize(400,300)
 
-
-        self.label = QLabel("Song: None")
-        self.label = QLabel("No folder selected")
-        
-        self.folder_button = QPushButton("Select osu! Folder")
-        self.folder_button.clicked.connect(self.select_folder)
-
-        self.play_button = QPushButton("Play")
-        self.play_button.clicked.connect(self.on_play)
-        
+        self.title("benkyosu!")
+        self.geometry("500x400")
+        self._set_appearance_mode("dark")
+        ctk.set_default_color_theme("dark-blue")
         
 
-        layout = QVBoxLayout()
-        layout.addWidget(self.label)
-        layout.addWidget(self.play_button)
-        layout.addWidget(self.folder_button)
-        self.setLayout(layout)
-
+        
         self.selected_folder = None
-        
 
-    def on_play(self):
-        #self.label.setText("Playing song...")
-        print("Play")
+        
+        self.folder_label = ctk.CTkLabel(
+            self,
+            text="No folder selected",
+            wraplength=450,
+        )
+        self.folder_label.pack(pady=20)
+
+        self.select_button = ctk.CTkButton(
+            master=self,
+            text="Select osu! Songs Folder",
+            corner_radius=32,
+            bg_color='transparent',
+            border_color="#FFCC70",
+            border_width=2,
+            command=self.select_folder
+        )
+        self.select_button.pack(pady=10)
 
     def select_folder(self):
-        folder = QFileDialog.getExistingDirectory(self, "Select osu Songs Folder")
+        folder = filedialog.askdirectory(title="Select osu Songs Folder")
         if folder:
             self.selected_folder = folder
-            self.label.setText(f"Selected folder:\n{folder}")
-  
-
+            self.folder_label.configure(text=f"Selected folder:\n{folder}")
+            print("Selected:", folder)
