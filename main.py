@@ -1,4 +1,4 @@
-from gui.main_window import App
+from gui.App import App
 import sys
 
 if __name__ == "__main__":
