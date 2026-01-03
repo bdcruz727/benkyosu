@@ -1,5 +1,7 @@
 import customtkinter as ctk
 from logic.song_loader import load_all_maps
+from logic.config import load_config, save_config
+from logic.cache import load_cache, save_cache
 from tkinter import filedialog
 
 class App(ctk.CTk):
@@ -17,16 +19,22 @@ class App(ctk.CTk):
             height=200
         )
 
-        
-        self.selected_folder = None
+        self.config = load_config()
+        self.songs_folder = self.config.get("songs_folder")
+    
+        if self.songs_folder == "":
+            self.selected_folder = None
+        else:
+            self.selected_folder = self.songs_folder
 
+        #self.beatmaps = load_all_maps(self.selected_folder)
         
         self.folder_label = ctk.CTkLabel(
             self,
             font=("Poppins", 32),
           
             text_color="#1e1e1e",
-            text="No folder selected",
+            text="Folder: " + self.selected_folder,
             wraplength=450,
         )
         self.folder_label.pack(pady=20)
@@ -45,9 +53,23 @@ class App(ctk.CTk):
     # self.beatmaps = internal database
     def select_folder(self):
         folder = filedialog.askdirectory(title="Select osu Songs Folder")
-        if folder:
-            self.selected_folder = folder
-            self.folder_label.configure(text=f"Selected folder:\n{folder}")
-            self.beatmaps = load_all_maps(folder)
-            print("Selected:", folder)
-            print(f"Loaded {len(self.beatmaps)} maps")
+
+        if not folder:
+            return
+        
+        self.selected_folder = folder
+        self.folder_label.configure(text=f"Selected folder:\n{folder}")
+        
+        self.config["songs_folder"] = folder
+        save_config(self.config)
+
+        cached = load_cache()
+        if cached:
+            self.beatmaps = cached
+            print(f"Loaded {len(self.beatmaps)} maps from cache")
+            return
+
+        print("Scanning songs folder...")
+        self.beatmaps = load_all_maps(folder) 
+        save_cache(self.beatmaps)
+        print(f"Scanned and cached {len(self.beatmaps)} maps")
