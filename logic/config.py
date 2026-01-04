@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 CONFIG_PATH = Path("data/config.json")
-MAP_CACHE_PATH = Path("data/map_cache.json")
+CACHE_PATH = Path("data/map_cache.json")
 
 def load_config():
     if not CONFIG_PATH.exists():
@@ -11,7 +11,8 @@ def load_config():
         return json.load(f)
     
 
-def save_config(config):
+def save_config_folder(config):
     CONFIG_PATH.parent.mkdir(exist_ok=True)
     with open(CONFIG_PATH, "w", encoding="utf-8") as f:
         json.dump(config, f, indent=4)
+

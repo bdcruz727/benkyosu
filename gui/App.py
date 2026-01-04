@@ -1,8 +1,10 @@
 import customtkinter as ctk
 from logic.song_loader import load_all_maps
-from logic.config import load_config, save_config
-from logic.cache import load_cache, save_cache
+from logic.config import load_config, save_config_folder
+from logic.cache import load_cache, save_cache, check_cache
 from tkinter import filedialog
+from logic.song import Song
+import os
 
 class App(ctk.CTk):
     def __init__(self):
@@ -57,19 +59,28 @@ class App(ctk.CTk):
         if not folder:
             return
         
+        folder = os.path.normpath(folder)
+        
         self.selected_folder = folder
         self.folder_label.configure(text=f"Selected folder:\n{folder}")
         
         self.config["songs_folder"] = folder
-        save_config(self.config)
+        save_config_folder(self.config)
 
-        cached = load_cache()
-        if cached:
-            self.beatmaps = cached
+        cache = load_cache()
+        cached_folder = os.path.normpath(cache.get("cached_maps_folder", ""))
+        cached_songs = cache.get("songs", [])
+
+        # Valid Cache
+        if folder == cached_folder and cached_songs:
+            print("Using Cached Maps")
+            self.beatmaps = [Song.from_dict(d) for d in cached_songs]
             print(f"Loaded {len(self.beatmaps)} maps from cache")
             return
-
+        
+        # Invalid Cache
         print("Scanning songs folder...")
-        self.beatmaps = load_all_maps(folder) 
-        save_cache(self.beatmaps)
+        self.beatmaps = load_all_maps(folder)
+        save_cache(folder, self.beatmaps)
         print(f"Scanned and cached {len(self.beatmaps)} maps")
+        

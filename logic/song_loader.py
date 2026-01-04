@@ -1,5 +1,10 @@
 import os
 from pathlib import Path
+from logic.song import Song
+from mutagen.mp3 import MP3
+from mutagen.wave import WAVE
+from mutagen.oggvorbis import OggVorbis
+from mutagen import MutagenError
 
 ### Returns a list of all beatmap folders, more specifically a list of dicts with set_id, folder_path, and name ###
 ### Does not do any parsing, just scans the songs folder ###
@@ -34,10 +39,10 @@ def parse_osu_file(file_path):
             try:
 
                 if line.startswith("BeatmapID:"):
-                    metadata['beatmap_id'] = line.strip().split(":", 1)[1].strip()
+                    metadata['id'] = line.strip().split(":", 1)[1].strip()
 
                 elif line.startswith("BeatmapSetID:"):
-                    metadata['beatmap_set_id'] = line.strip().split(":", 1)[1].strip()
+                    metadata['set_id'] = line.strip().split(":", 1)[1].strip()
 
                 elif line.startswith("Title:"):
                     metadata['title'] = line.strip().split(":", 1)[1].strip()
@@ -48,21 +53,37 @@ def parse_osu_file(file_path):
                 elif line.startswith("Creator:"):
                     metadata['creator'] = line.strip().split(":", 1)[1].strip()
                 
+                elif line.startswith("Version"):
+                    metadata['version'] = line.strip().split(":", 1)[1].strip()
+                
                 elif line.startswith("AudioFilename:"):
-                    metadata['audio_filename'] = line.strip().split(":", 1)[1].strip()
+                    metadata['audio'] = line.strip().split(":", 1)[1].strip()
                 
 
             except:
                 print(f"Error Loading Map: {file_path}")
-                return
+                return None
 
-    metadata['folder'] = str(Path(file_path).parent)
+    file_folder = str(Path(file_path).parent)
+    metadata['folder'] = file_folder
+
+    if "audio" not in metadata:
+        return None
+
+    audio_file_path = os.path.join(file_folder, metadata['audio'])
+    audio_length = get_audio_duration(audio_file_path)
+    if audio_length == -1:
+        print(f"Error getting audio length for map: {file_path}")
+        return
+
+    metadata['length'] = str(audio_length)
     return metadata
 
 ### Loads all beatmaps in the song folder ###
 ### Internal call to parse_osu_file to get metadata of each map, stores in list of maps ###
 def load_all_maps(songs_folder):
     maps = []
+    seen_keys = set()
 
     for folder in os.listdir(songs_folder):
         folder_path = os.path.join(songs_folder, folder)
@@ -70,14 +91,83 @@ def load_all_maps(songs_folder):
             continue
 
         for file in os.listdir(folder_path):
-            if file.endswith(".osu"):
-                osu_path = os.path.join(folder_path, file)
-                info = parse_osu_file(osu_path)
+            if not file.endswith(".osu"):
+                continue
 
-                if "beatmap_id" in info:
-                    maps.append(info)
-                else:
-                    print("ERROR")
+            osu_path = os.path.join(folder_path, file)
+            info = parse_osu_file(osu_path)
+            # print(info)
 
-    print(f"Length: {len(maps)}")
+            if not info:
+                print("not info")
+                continue
+
+            if "artist" not in info or "title" not in info or "audio" not in info:
+                print("chungus")
+                continue
+
+            song_key = (folder_path, info["audio"])
+            if song_key in seen_keys:
+                continue
+            seen_keys.add(song_key)
+            try:
+                song = Song(
+                    id = info["id"],
+                    set_id = info["set_id"],
+                    title = info["title"],
+                    artist = info["artist"],
+                    creator = info["creator"],
+                    version = info["version"],
+                    audio = info["audio"],
+                    folder = folder_path,
+                    length = info["length"]
+                )
+
+                maps.append(song)
+            except:
+                print(f"failed to append key: {song_key}")
+                continue
+
+    print(f"Scanned {len(maps)} unique songs")
     return maps
+        
+"""
+def get_audio_duration(file_path):
+    if file_path.lower().endswith(".mp3"):
+        audio = MP3(file_path)
+    elif file_path.lower().endswith(".wav"):
+        audio = WAVE(file_path)
+    elif file_path.lower().endswith(".ogg"):
+        audio = OggVorbis(file_path)
+    
+    if audio and audio.info:
+        return audio.info.length
+    else:
+        return -1
+"""
+
+def get_audio_duration(file_path):
+    if not os.path.exists(file_path):
+        return -1
+
+    try:
+        ext = file_path.lower()
+
+        if ext.endswith(".mp3"):
+            audio = MP3(file_path)
+        elif ext.endswith(".wav"):
+            audio = WAVE(file_path)
+        elif ext.endswith(".ogg"):
+            audio = OggVorbis(file_path)
+        elif ext.endswith(".flac"):
+            from mutagen.flac import FLAC
+            audio = FLAC(file_path)
+        else:
+            return -1
+
+        return audio.info.length if audio.info else -1
+
+    except MutagenError:
+        return -1
+    except Exception:
+        return -1
