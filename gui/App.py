@@ -36,7 +36,7 @@ class App(ctk.CTk):
             font=("Poppins", 32),
           
             text_color="#1e1e1e",
-            text="Folder: " + self.selected_folder,
+            text= f"Folder: {self.selected_folder}",
             wraplength=450,
         )
         self.folder_label.pack(pady=20)
