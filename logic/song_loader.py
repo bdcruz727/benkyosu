@@ -96,7 +96,7 @@ def load_all_maps(songs_folder):
 
             osu_path = os.path.join(folder_path, file)
             info = parse_osu_file(osu_path)
-            # print(info)
+            #print(info)
 
             if not info:
                 print("not info")
@@ -107,6 +107,7 @@ def load_all_maps(songs_folder):
                 continue
 
             song_key = (folder_path, info["audio"])
+            #print(song_key)
             if song_key in seen_keys:
                 continue
             seen_keys.add(song_key)

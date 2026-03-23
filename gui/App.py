@@ -5,6 +5,8 @@ from logic.cache import load_cache, save_cache, check_cache
 from tkinter import filedialog
 from logic.song import Song
 import os
+import threading
+import time
 
 class App(ctk.CTk):
     def __init__(self):
@@ -52,9 +54,12 @@ class App(ctk.CTk):
         )
         self.select_button.pack(pady=10)
 
+
+    
+
     # self.beatmaps = internal database
     def select_folder(self):
-        folder = filedialog.askdirectory(title="Select osu Songs Folder")
+        folder = filedialog.askdirectory(title="Select osu! Songs Folder")
 
         if not folder:
             return
@@ -67,6 +72,12 @@ class App(ctk.CTk):
         self.config["songs_folder"] = folder
         save_config_folder(self.config)
 
+        self.select_button.configure(state="disabled", text="Loading Beatmaps (May take awhile...)")
+
+        thread = threading.Thread(target=self.load_maps_thread, args=(folder,), daemon=True)
+        thread.start()
+
+    def load_maps_thread(self, folder):
         cache = load_cache()
         cached_folder = os.path.normpath(cache.get("cached_maps_folder", ""))
         cached_songs = cache.get("songs", [])
@@ -76,6 +87,7 @@ class App(ctk.CTk):
             print("Using Cached Maps")
             self.beatmaps = [Song.from_dict(d) for d in cached_songs]
             print(f"Loaded {len(self.beatmaps)} maps from cache")
+            self.select_button.configure(state="enabled", text="Select osu! Songs Folder")
             return
         
         # Invalid Cache
@@ -83,4 +95,6 @@ class App(ctk.CTk):
         self.beatmaps = load_all_maps(folder)
         save_cache(folder, self.beatmaps)
         print(f"Scanned and cached {len(self.beatmaps)} maps")
+        self.select_button.configure(state="enabled", text="Select osu! Songs Folder")
         
+
