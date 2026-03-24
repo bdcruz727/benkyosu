@@ -1,4 +1,181 @@
 {
-  "cached_maps_folder": "",
-  "songs": []
+  "cached_maps_folder": "C:\\Users\\Romar Dela Cruz\\Desktop\\benkyosu\\data\\test_data",
+  "songs": [
+    {
+      "id": "2153557",
+      "set_id": "1029921",
+      "title": "Yuunagi, Bou, Hana Madoi",
+      "artist": "Yorushika",
+      "creator": "Delis",
+      "version": "Collab Extra",
+      "audio": "audio.mp3",
+      "folder": "C:\\Users\\Romar Dela Cruz\\Desktop\\benkyosu\\data\\test_data\\1029921 Yorushika - Yuunagi, Bou, Hana Madoi",
+      "length": "199.53061224489795"
+    },
+    {
+      "id": "2281169",
+      "set_id": "1091147",
+      "title": "A FOOL MOON NIGHT",
+      "artist": "The Koxx",
+      "creator": "L3NNy",
+      "version": "-A FOOL POG NIGHT-",
+      "audio": "audio.mp3",
+      "folder": "C:\\Users\\Romar Dela Cruz\\Desktop\\benkyosu\\data\\test_data\\1091147 The Koxx - A FOOL MOON NIGHT",
+      "length": "238.7330612244898"
+    },
+    {
+      "id": "2318679",
+      "set_id": "1107469",
+      "title": "Sound Chimera",
+      "artist": "Laur",
+      "creator": "cosmospice",
+      "version": "Gorgon",
+      "audio": "audio.MP3",
+      "folder": "C:\\Users\\Romar Dela Cruz\\Desktop\\benkyosu\\data\\test_data\\1107469 Laur - Sound Chimera",
+      "length": "308.8718367346939"
+    },
+    {
+      "id": "2372012",
+      "set_id": "1108809",
+      "title": "Aruku",
+      "artist": "Yorushika",
+      "creator": "Faito",
+      "version": "Enerugi's Extra",
+      "audio": "audio.mp3",
+      "folder": "C:\\Users\\Romar Dela Cruz\\Desktop\\benkyosu\\data\\test_data\\1108809 Yorushika - Aruku",
+      "length": "206.81142857142856"
+    },
+    {
+      "id": "2793070",
+      "set_id": "1327719",
+      "title": "ONE-MAN CIRCUS",
+      "artist": "Iwami Takashi",
+      "creator": "FinnaDie",
+      "version": "INSANE",
+      "audio": "audio.mp3",
+      "folder": "C:\\Users\\Romar Dela Cruz\\Desktop\\benkyosu\\data\\test_data\\1327719 Iwami Takashi - ONE-MAN CIRCUS",
+      "length": "165.12"
+    },
+    {
+      "id": "386940",
+      "set_id": "157896",
+      "title": "Monster (DotEXE Remix)",
+      "artist": "Meg & Dia",
+      "creator": "nold_1702",
+      "version": "Chewin's Extra",
+      "audio": "Meg & Dia - Monster (DotEXE Dubstep Remix).mp3",
+      "folder": "C:\\Users\\Romar Dela Cruz\\Desktop\\benkyosu\\data\\test_data\\157896 Meg & Dia - Monster (DotEXE Remix)",
+      "length": "127.09104166666667"
+    },
+    {
+      "id": "3873668",
+      "set_id": "1676482",
+      "title": "Thoughtcrime",
+      "artist": "Yorushika",
+      "creator": "Deca",
+      "version": "Akitoshi's Extreme",
+      "audio": "audio.mp3",
+      "folder": "C:\\Users\\Romar Dela Cruz\\Desktop\\benkyosu\\data\\test_data\\1676482 Yorushika - Thoughtcrime",
+      "length": "252.1077551020408"
+    },
+    {
+      "id": "522938",
+      "set_id": "170446",
+      "title": "Rubik's Cube",
+      "artist": "Nanahoshi Kangengakudan feat. Hatsune Miku",
+      "creator": "Harbyter",
+      "version": "Ene's SC",
+      "audio": "Rubik's Cube.mp3",
+      "folder": "C:\\Users\\Romar Dela Cruz\\Desktop\\benkyosu\\data\\test_data\\170446 Nanahoshi Kangengakudan feat Hatsune Miku - Rubik's Cube",
+      "length": "201.43020408163267"
+    },
+    {
+      "id": "3946701",
+      "set_id": "1913188",
+      "title": "Toumin",
+      "artist": "Yorushika",
+      "creator": "BadGames",
+      "version": "Insane",
+      "audio": "audio.mp3",
+      "folder": "C:\\Users\\Romar Dela Cruz\\Desktop\\benkyosu\\data\\test_data\\1913188 Yorushika - Toumin",
+      "length": "301.24408163265304"
+    },
+    {
+      "id": "537630",
+      "set_id": "230989",
+      "title": "Give It Up",
+      "artist": "Knife Party",
+      "creator": "Shadren",
+      "version": "BM's Hard",
+      "audio": "Knife Party - Give It Up.mp3",
+      "folder": "C:\\Users\\Romar Dela Cruz\\Desktop\\benkyosu\\data\\test_data\\230989 Knife Party - Give It Up",
+      "length": "111.56126984126985"
+    },
+    {
+      "id": "694476",
+      "set_id": "310793",
+      "title": "Silhouette",
+      "artist": "KANA-BOON",
+      "creator": "ExKagii-",
+      "version": "HD",
+      "audio": "OP Silhouette.mp3",
+      "folder": "C:\\Users\\Romar Dela Cruz\\Desktop\\benkyosu\\data\\test_data\\310793 KANA-BOON - Silhouette",
+      "length": "90.5665"
+    },
+    {
+      "id": "720553",
+      "set_id": "324288",
+      "title": "ANiMA",
+      "artist": "xi",
+      "creator": "Kuo Kyoka",
+      "version": "4K Lv.4",
+      "audio": "anima.mp3",
+      "folder": "C:\\Users\\Romar Dela Cruz\\Desktop\\benkyosu\\data\\test_data\\324288 xi - ANiMA",
+      "length": "118.84133333333334"
+    },
+    {
+      "id": "980077",
+      "set_id": "437797",
+      "title": "Soukai Rock",
+      "artist": "Silent Siren",
+      "creator": "Shad0w1and",
+      "version": "A r M i N's Easy",
+      "audio": "optc.mp3",
+      "folder": "C:\\Users\\Romar Dela Cruz\\Desktop\\benkyosu\\data\\test_data\\437797 Silent Siren - Soukai Rock",
+      "length": "120.83133786848073"
+    },
+    {
+      "id": "1350695",
+      "set_id": "636272",
+      "title": "Marigold (feat. Guriri)",
+      "artist": "M2U",
+      "creator": "DE-CADE",
+      "version": "4K Hard Lv.10",
+      "audio": "Marigold.mp3",
+      "folder": "C:\\Users\\Romar Dela Cruz\\Desktop\\benkyosu\\data\\test_data\\636272 M2U - Marigold (feat Guriri)",
+      "length": "154.89850340136056"
+    },
+    {
+      "id": "1367019",
+      "set_id": "645074",
+      "title": "Silver Scrapes",
+      "artist": "Danny McCarthy",
+      "creator": "SevenEnd7",
+      "version": "Easy",
+      "audio": "audio.mp3",
+      "folder": "C:\\Users\\Romar Dela Cruz\\Desktop\\benkyosu\\data\\test_data\\645074 Danny McCarthy - Silver Scrapes",
+      "length": "49.894285714285715"
+    },
+    {
+      "id": "2012216",
+      "set_id": "803906",
+      "title": "Just a Sunny Day for You",
+      "artist": "Yorushika",
+      "creator": "Wriothesley",
+      "version": "Boss' Advanced",
+      "audio": "audio.mp3",
+      "folder": "C:\\Users\\Romar Dela Cruz\\Desktop\\benkyosu\\data\\test_data\\803906 Yorushika - Just a Sunny Day for You",
+      "length": "199.0008163265306"
+    }
+  ]
 }

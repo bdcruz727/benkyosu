@@ -4,6 +4,7 @@ from logic.config import load_config, save_config_folder
 from logic.cache import load_cache, save_cache, check_cache
 from tkinter import filedialog
 from logic.song import Song
+from gui.player_ui import PlayerBar
 import os
 import threading
 import time
@@ -53,6 +54,13 @@ class App(ctk.CTk):
             command=self.select_folder
         )
         self.select_button.pack(pady=10)
+
+        # In App.__init__:
+        self.player_bar = PlayerBar(self)
+        self.player_bar.pack(fill="x", side="bottom")
+
+        
+
 
 
     

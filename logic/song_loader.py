@@ -25,6 +25,17 @@ def get_beatmap_set(songs_folder):
     
     return beatmap_sets
 
+# Returns song name as string
+def get_song_name(file_path):
+    with open(file_path, 'r', encoding='utf-8') as f:
+        for line in f:
+            try:
+                if line.startswith("Title:"):
+                    return line.strip().split(":", 1)[1].strip()
+            except:
+                print(f"Error Getting Song Name: {file_path}")
+                return None
+    return None
 
 ### Takes a map file path and extracts the metadata ###
 def parse_osu_file(file_path):
@@ -84,6 +95,8 @@ def parse_osu_file(file_path):
 def load_all_maps(songs_folder):
     maps = []
     seen_keys = set()
+    prev_song_name = ""
+   
 
     for folder in os.listdir(songs_folder):
         folder_path = os.path.join(songs_folder, folder)
@@ -91,10 +104,18 @@ def load_all_maps(songs_folder):
             continue
 
         for file in os.listdir(folder_path):
+
             if not file.endswith(".osu"):
                 continue
 
             osu_path = os.path.join(folder_path, file)
+            song_name = get_song_name(osu_path)
+
+            if song_name == prev_song_name:
+                print(f"Song {song_name} already loaded, Skipping Folder")
+                break
+
+            prev_song_name = song_name
             info = parse_osu_file(osu_path)
             #print(info)
 
