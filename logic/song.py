@@ -1,4 +1,5 @@
 import os
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 
 class Song:
     def __init__(self, id, set_id, title, artist, creator, version, audio, folder, length=None):
@@ -42,6 +43,6 @@ class Song:
             version = d["version"],
             audio = d["audio"],
             folder = d["folder"],
-            length = d["length"]
+            length = float(d["length"]) if d["length"] is not None else None
         )
 

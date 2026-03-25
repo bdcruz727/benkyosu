@@ -14,7 +14,7 @@ class App(ctk.CTk):
         super().__init__()
 
         self.title("benkyosu!")
-        self.geometry("500x400")
+        self.geometry("500x650")
         self._set_appearance_mode("light")
         self.resizable(False, False)
 
@@ -32,7 +32,8 @@ class App(ctk.CTk):
         else:
             self.selected_folder = self.songs_folder
 
-        #self.beatmaps = load_all_maps(self.selected_folder)
+        if self.selected_folder:
+            self.after(100, self.autoload_maps)
         
         self.folder_label = ctk.CTkLabel(
             self,
@@ -55,15 +56,14 @@ class App(ctk.CTk):
         )
         self.select_button.pack(pady=10)
 
+        self.song_listbox = ctk.CTkScrollableFrame(self, height=150)
+        self.song_listbox.pack(fill="x", padx=20, pady=(10, 0))
+
         # In App.__init__:
         self.player_bar = PlayerBar(self)
         self.player_bar.pack(fill="x", side="bottom")
 
         
-
-
-
-    
 
     # self.beatmaps = internal database
     def select_folder(self):
@@ -95,14 +95,40 @@ class App(ctk.CTk):
             print("Using Cached Maps")
             self.beatmaps = [Song.from_dict(d) for d in cached_songs]
             print(f"Loaded {len(self.beatmaps)} maps from cache")
-            self.select_button.configure(state="enabled", text="Select osu! Songs Folder")
-            return
-        
-        # Invalid Cache
-        print("Scanning songs folder...")
-        self.beatmaps = load_all_maps(folder)
-        save_cache(folder, self.beatmaps)
-        print(f"Scanned and cached {len(self.beatmaps)} maps")
-        self.select_button.configure(state="enabled", text="Select osu! Songs Folder")
-        
 
+        # Invalid Cache   
+        else:
+            print("Scanning songs folder...")
+            self.beatmaps = load_all_maps(folder)
+            save_cache(folder, self.beatmaps)
+            print(f"Scanned and cached {len(self.beatmaps)} maps")
+
+        self.after(0, self.on_maps_loaded)
+ 
+        
+    def autoload_maps(self):
+        self.select_button.configure(state="disabled", text="Loading Beatmaps...")
+        thread = threading.Thread(target=self.load_maps_thread, args=(self.selected_folder,), daemon=True)
+        thread.start()
+
+    def on_maps_loaded(self):
+        self.select_button.configure(state="normal", text="Select osu! Songs Folder")
+        self.populate_song_list()
+
+    def populate_song_list(self):
+        # Clear existing entries
+        for widget in self.song_listbox.winfo_children():
+            widget.destroy()
+
+        for song in self.beatmaps:
+            audio_path = song.audio_path()
+            label = ctk.CTkButton(
+                self.song_listbox,
+                text=f"{song.artist} — {song.title}",
+                anchor="w",
+                fg_color="transparent",
+                text_color=("gray10", "gray90"),
+                hover_color=("gray85", "gray25"),
+                command=lambda s=song: self.player_bar.load_song(s, playlist=self.beatmaps),  # s=song captures correctly
+            )
+            label.pack(fill="x", pady=1)

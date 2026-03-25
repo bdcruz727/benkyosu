@@ -3,30 +3,32 @@ import pygame
 import threading
 import time
 from logic.song import Song
+import math
 
 class AudioPlayer:
     def __init__(self):
         pygame.mixer.init()
         self._current_path = None
         self._paused = False
-        self._progress_callback = None  # fn(current_sec, total_sec)
-        self._end_callback = None       # fn() called when track finishes
+        self._progress_callback = None
+        self._end_callback = None
         self._monitor_thread = None
         self._running = False
         self._total_length = 0.0
+        self._seek_offset = 0.0
 
-    def load_song(self, song: Song):
-        self.player.load(song.audio())
-        self.player.play()
-        self.title_label.configure(text=f"{song.artist} — {song.title}")
-        self.play_btn.configure(text="Pause")
-        
-        # Use song.length if available, otherwise fall back to mutagen
-        total = song.length if song.length else self.player.duration
-        self.total_label.configure(text=self._fmt(total))
-        self.seek_slider.configure(to=max(total, 1))
+    def load_song(self, path: str):
+        """Load a track without playing it."""
+        self.stop()
+        pygame.mixer.music.load(path)
+        self._current_path = path
+        self._paused = False
+
+    def set_duration(self, seconds: float):
+        self._total_length = float(seconds) if seconds else 0.0
 
     def play(self):
+        self._seek_offset = 0.0
         pygame.mixer.music.play()
         self._paused = False
         self._start_monitor()
@@ -47,11 +49,11 @@ class AudioPlayer:
         self._paused = False
 
     def seek(self, seconds: float):
+        self._seek_offset = seconds
         pygame.mixer.music.play(start=seconds)
         self._paused = False
 
     def set_volume(self, volume: float):
-        """0.0 to 1.0"""
         pygame.mixer.music.set_volume(volume)
 
     @property
@@ -60,19 +62,16 @@ class AudioPlayer:
 
     @property
     def position(self) -> float:
-        """Current playback position in seconds."""
-        return pygame.mixer.music.get_pos() / 1000.0
+        return self._seek_offset + pygame.mixer.music.get_pos() / 1000.0
 
     @property
     def duration(self) -> float:
         return self._total_length
 
     def on_progress(self, callback):
-        """Register fn(current_sec, total_sec) called ~every second."""
         self._progress_callback = callback
 
     def on_end(self, callback):
-        """Register fn() called when track ends naturally."""
         self._end_callback = callback
 
     def _start_monitor(self):

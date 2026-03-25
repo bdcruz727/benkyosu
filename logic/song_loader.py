@@ -112,7 +112,7 @@ def load_all_maps(songs_folder):
             song_name = get_song_name(osu_path)
 
             if song_name == prev_song_name:
-                print(f"Song {song_name} already loaded, Skipping Folder")
+                #print(f"Song {song_name} already loaded, Skipping Folder")
                 break
 
             prev_song_name = song_name
@@ -193,3 +193,4 @@ def get_audio_duration(file_path):
         return -1
     except Exception:
         return -1
+    
