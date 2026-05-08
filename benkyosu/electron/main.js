@@ -10,7 +10,7 @@ function createWindow() {
     width: 1100,
     height: 750,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(app.getAppPath(), 'dist-electron', 'preload.js'),
       contextIsolation: true,
     }
   })
@@ -36,23 +36,23 @@ function parseOsuFile(filePath){
     for (const rawLine of lines) {
         const line = rawLine.trim()
 
-        if (line = "[TimingPoints]") {
+        if (line === "[TimingPoints]") {
             break
         }
 
-        else if (line.startsWith('Title')) {
+        else if (line.startsWith('Title:')) {
             title = line.slice(6).trim()
         }
 
-        else if (line.startsWith('Artist')) {
+        else if (line.startsWith('Artist:')) {
             artist = line.slice(7).trim()
         }
 
-        else if (line.startsWith('AudioFilename')) {
+        else if (line.startsWith('AudioFilename:')) {
             audioFilename = line.slice(14).trim()
         }
 
-        else if (line.startsWith('Creator')) {
+        else if (line.startsWith('Creator:')) {
             creator = line.slice(8).trim()
         }
 
@@ -64,12 +64,15 @@ function parseOsuFile(filePath){
 
     }
 
-
+    
     return {title, artist, audioFilename, creator}
     // return {title, artist, audioFilename, creator, version}
 }
 
-ipcMain.handle('scan-osu-folder', async (songsPath) => {
+ipcMain.handle('scan-osu-folder', async (event, songsPath) => {
+    
+    //console.log('received path:', songsPath)
+    //console.log('path exists:', fs.existsSync(songsPath))
 
     if (!fs.existsSync(songsPath)) {
         return []
@@ -77,14 +80,16 @@ ipcMain.handle('scan-osu-folder', async (songsPath) => {
 
     const results = []
     const folders = fs.readdirSync(songsPath)
+    //console.log('folders found:', folders.length)
 
     for (const folder of folders) {
-        const folderPath = path.join(songsPath, folderr)
+        const folderPath = path.join(songsPath, folder)
         if (!fs.statSync(folderPath).isDirectory()) {
             continue
         }
 
         const osuFiles = fs.readdirSync(folderPath).filter(f => f.endsWith('.osu'))
+        console.log(`${folder}: found ${osuFiles.length} .osu files`)
         if (osuFiles.length === 0) {
             continue
         }

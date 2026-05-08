@@ -4,10 +4,30 @@ import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
 
+
 function App() {
   const [count, setCount] = useState(0)
 
+  const [songs, setSongs] = useState([])
+
+  async function loadSongs() {
+  const result = await window.electronAPI.scanOsuFolder(
+    String.raw`C:/Users/Romar Dela Cruz/Desktop/benkyosu/data/test_data`
+  )
+  console.log('songs found:', result)
+  setSongs(result)
+}
+
   return (
+    <div>
+      <button onClick={loadSongs}>Load osu! Songs</button>
+      {songs.map(song => (
+        <div key={song.audioPath}>
+          {song.artist} - {song.title}
+        </div>
+      ))}
+    </div>
+    /*
     <>
       <section id="center">
         <div className="hero">
@@ -116,7 +136,7 @@ function App() {
       <div className="ticks"></div>
       <section id="spacer"></section>
     </>
-  )
+  */)
 }
 
 export default App
